@@ -1,0 +1,181 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "相关接口"
+                ],
+                "summary": "获取区域",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "区域编码",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "结果",
+                        "schema": {
+                            "$ref": "#/definitions/models.Area"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "相关接口"
+                ],
+                "summary": "刷新区域",
+                "responses": {
+                    "200": {
+                        "description": "结果"
+                    }
+                }
+            }
+        },
+        "/cities": {
+            "get": {
+                "tags": [
+                    "相关接口"
+                ],
+                "summary": "获取城市",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "省份区域编码",
+                        "name": "provinceCode",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "结果",
+                        "schema": {
+                            "description": "下级行政区列表",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Area"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/districts": {
+            "get": {
+                "tags": [
+                    "相关接口"
+                ],
+                "summary": "获取区县",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "城市区域编码",
+                        "name": "cityCode",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "结果",
+                        "schema": {
+                            "description": "下级行政区列表",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Area"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/provinces": {
+            "get": {
+                "tags": [
+                    "相关接口"
+                ],
+                "summary": "获取省份",
+                "responses": {
+                    "200": {
+                        "description": "结果",
+                        "schema": {
+                            "description": "下级行政区列表",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Area"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/streets": {
+            "get": {
+                "tags": [
+                    "相关接口"
+                ],
+                "summary": "获取街道",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "区县区域编码",
+                        "name": "districtCode",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "结果",
+                        "schema": {
+                            "description": "下级行政区列表",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Area"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Area": {
+            "type": "object",
+            "properties": {
+                "center": {
+                    "description": "区域中心点",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "区域编码",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "行政区划级别",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "行政区名称",
+                    "type": "string"
+                },
+                "subs": {
+                    "description": "下级行政区列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Area"
+                    }
+                }
+            }
+        }
+    }
+}

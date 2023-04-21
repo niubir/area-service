@@ -1,0 +1,118 @@
+definitions:
+  models.Area:
+    properties:
+      center:
+        description: 区域中心点
+        type: string
+      code:
+        description: 区域编码
+        type: string
+      level:
+        description: 行政区划级别
+        type: integer
+      name:
+        description: 行政区名称
+        type: string
+      subs:
+        description: 下级行政区列表
+        items:
+          $ref: '#/definitions/models.Area'
+        type: array
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      parameters:
+      - description: 区域编码
+        in: query
+        name: code
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 结果
+          schema:
+            $ref: '#/definitions/models.Area'
+      summary: 获取区域
+      tags:
+      - 相关接口
+    post:
+      responses:
+        "200":
+          description: 结果
+      summary: 刷新区域
+      tags:
+      - 相关接口
+  /cities:
+    get:
+      parameters:
+      - description: 省份区域编码
+        in: query
+        name: provinceCode
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 结果
+          schema:
+            description: 下级行政区列表
+            items:
+              $ref: '#/definitions/models.Area'
+            type: array
+      summary: 获取城市
+      tags:
+      - 相关接口
+  /districts:
+    get:
+      parameters:
+      - description: 城市区域编码
+        in: query
+        name: cityCode
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 结果
+          schema:
+            description: 下级行政区列表
+            items:
+              $ref: '#/definitions/models.Area'
+            type: array
+      summary: 获取区县
+      tags:
+      - 相关接口
+  /provinces:
+    get:
+      responses:
+        "200":
+          description: 结果
+          schema:
+            description: 下级行政区列表
+            items:
+              $ref: '#/definitions/models.Area'
+            type: array
+      summary: 获取省份
+      tags:
+      - 相关接口
+  /streets:
+    get:
+      parameters:
+      - description: 区县区域编码
+        in: query
+        name: districtCode
+        required: true
+        type: string
+      responses:
+        "200":
+          description: 结果
+          schema:
+            description: 下级行政区列表
+            items:
+              $ref: '#/definitions/models.Area'
+            type: array
+      summary: 获取街道
+      tags:
+      - 相关接口
+swagger: "2.0"
