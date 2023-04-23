@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/niubir/area-service/models"
+	"github.com/niubir/utils"
 )
 
 const (
@@ -29,6 +30,12 @@ var (
 )
 
 func initArea() error {
+	if !utils.FilepathExist(area_file_path) {
+		if err := os.Mkdir(area_file_path, os.ModePerm); err != nil {
+			return err
+		}
+	}
+
 	fileInfos, err := ioutil.ReadDir(area_file_path)
 	if err != nil {
 		return err

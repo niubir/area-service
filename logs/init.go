@@ -1,10 +1,16 @@
 package logs
 
 import (
+	"os"
 	"time"
 
 	"github.com/niubir/area-service/config"
 	"github.com/niubir/logger"
+	"github.com/niubir/utils"
+)
+
+const (
+	log_filepath = "./logs"
 )
 
 var (
@@ -12,6 +18,12 @@ var (
 )
 
 func Init() error {
+	if !utils.FilepathExist(log_filepath) {
+		if err := os.Mkdir(log_filepath, os.ModePerm); err != nil {
+			return err
+		}
+	}
+
 	var err error
 	l, err = NewLogger("area_service")
 	return err
@@ -47,7 +59,7 @@ func NewLogger(prefix string) (*logger.Logger, error) {
 		logger.WithLevel(loggerLevel),
 		logger.WithTimeFormat(time.RFC3339Nano),
 		logger.WithStdout(loggerWithStdout),
-		logger.WithPath("./logs"),
+		logger.WithPath(log_filepath),
 		logger.WithPrefix(prefix),
 		logger.WithDuration(24*time.Hour),
 		logger.WithMaxByte(10*1024*1024),
@@ -69,7 +81,7 @@ func NewFileLogger(prefix string) (*logger.FileLogger, error) {
 		logger.WithLevel(loggerLevel),
 		logger.WithTimeFormat(time.RFC3339Nano),
 		logger.WithStdout(loggerWithStdout),
-		logger.WithPath("./logs"),
+		logger.WithPath(log_filepath),
 		logger.WithPrefix(prefix),
 		logger.WithDuration(24*time.Hour),
 		logger.WithMaxByte(10*1024*1024),

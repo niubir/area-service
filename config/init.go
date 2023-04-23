@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -14,20 +13,10 @@ var Config config
 
 // Init 初始化配置文件
 // configFilePath->env->./config/config.yml
-func Init(configFilePaths ...string) error {
-	var configFilePath string
-	if len(configFilePaths) > 0 {
-		configFilePath = configFilePaths[0]
-	}
-	if configFilePath == "" {
-		configFilePath = os.Getenv(`CONFIG_FILE`)
-	}
-	if configFilePath == "" {
-		dir, err := os.Getwd()
-		if err != nil {
-			return errors.New("invalid config file: " + err.Error())
-		}
-		configFilePath = fmt.Sprintf(`%s/config/config.yml`, dir)
+func Init() error {
+	configFilePath := "./config/config.yml"
+	if envConfigFilePath := os.Getenv(`CONFIG_FILE`); envConfigFilePath != "" {
+		configFilePath = envConfigFilePath
 	}
 
 	data, err := ioutil.ReadFile(configFilePath)
