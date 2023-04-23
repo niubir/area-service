@@ -23,7 +23,7 @@ type AmapArea struct {
 }
 
 func getAmapAreas() (models.Areas, error) {
-	provinces, err := getAmapAreasQuery(area_top_code, 1)
+	provinces, err := getAmapAreasQuery(areaTopCode, 1)
 	if err != nil {
 		return nil, err
 	}

@@ -9,21 +9,24 @@ import (
 	"github.com/niubir/utils"
 )
 
-const (
-	log_filepath = "./logs"
-)
-
 var (
+	logDirPath = "/logs"
+
 	l *logger.Logger
 )
 
-func Init() error {
-	if !utils.FilepathExist(log_filepath) {
-		if err := os.Mkdir(log_filepath, os.ModePerm); err != nil {
-			return err
+func init() {
+	if envLogPath := os.Getenv(`LOG_DIR_PATH`); envLogPath != "" {
+		logDirPath = envLogPath
+	}
+	if !utils.FilepathExist(logDirPath) {
+		if err := os.Mkdir(logDirPath, os.ModePerm); err != nil {
+			panic(err)
 		}
 	}
+}
 
+func Init() error {
 	var err error
 	l, err = NewLogger("area_service")
 	return err
@@ -59,7 +62,7 @@ func NewLogger(prefix string) (*logger.Logger, error) {
 		logger.WithLevel(loggerLevel),
 		logger.WithTimeFormat(time.RFC3339Nano),
 		logger.WithStdout(loggerWithStdout),
-		logger.WithPath(log_filepath),
+		logger.WithPath(logDirPath),
 		logger.WithPrefix(prefix),
 		logger.WithDuration(24*time.Hour),
 		logger.WithMaxByte(10*1024*1024),
@@ -81,7 +84,7 @@ func NewFileLogger(prefix string) (*logger.FileLogger, error) {
 		logger.WithLevel(loggerLevel),
 		logger.WithTimeFormat(time.RFC3339Nano),
 		logger.WithStdout(loggerWithStdout),
-		logger.WithPath(log_filepath),
+		logger.WithPath(logDirPath),
 		logger.WithPrefix(prefix),
 		logger.WithDuration(24*time.Hour),
 		logger.WithMaxByte(10*1024*1024),

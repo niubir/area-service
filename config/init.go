@@ -9,16 +9,19 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-var Config config
+var (
+	configFilePath = "/config/config.yml"
+	Config         config
+)
 
-// Init 初始化配置文件
-// configFilePath->env->./config/config.yml
-func Init() error {
-	configFilePath := "./config/config.yml"
-	if envConfigFilePath := os.Getenv(`CONFIG_FILE`); envConfigFilePath != "" {
+func init() {
+	if envConfigFilePath := os.Getenv(`CONFIG_FILE_PATH`); envConfigFilePath != "" {
 		configFilePath = envConfigFilePath
 	}
+}
 
+// Init 初始化配置文件
+func Init() error {
 	data, err := ioutil.ReadFile(configFilePath)
 	if err != nil {
 		return errors.New("invalid load config file: " + err.Error())

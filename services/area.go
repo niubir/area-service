@@ -13,14 +13,12 @@ import (
 	"github.com/niubir/utils"
 )
 
-const (
-	area_file_path          = "./data"
-	area_file_name_template = "area_%s.json"
-	area_file_name_layout   = "20060102150405"
-	area_top_code           = "100000"
-)
-
 var (
+	areaDirPath          = "/data"
+	areaFileNameTemplate = "area_%s.json"
+	areaFileNameLayout   = "20060102150405"
+	areaTopCode          = "100000"
+
 	areaCacheMu    sync.RWMutex
 	areaCache      = make(map[string]models.Area)
 	provincesCache = make(map[string]models.Areas)
@@ -29,14 +27,25 @@ var (
 	streetsCache   = make(map[string]models.Areas)
 )
 
+func init() {
+	if envAreaPath := os.Getenv(`AREA_DIR_PATH`); envAreaPath != "" {
+		areaDirPath = envAreaPath
+	}
+	if !utils.FilepathExist(areaDirPath) {
+		if err := os.Mkdir(areaDirPath, os.ModePerm); err != nil {
+			panic(err)
+		}
+	}
+}
+
 func initArea() error {
-	if !utils.FilepathExist(area_file_path) {
-		if err := os.Mkdir(area_file_path, os.ModePerm); err != nil {
+	if !utils.FilepathExist(areaDirPath) {
+		if err := os.Mkdir(areaDirPath, os.ModePerm); err != nil {
 			return err
 		}
 	}
 
-	fileInfos, err := ioutil.ReadDir(area_file_path)
+	fileInfos, err := ioutil.ReadDir(areaDirPath)
 	if err != nil {
 		return err
 	}
@@ -59,7 +68,7 @@ func initArea() error {
 	}
 
 	if lastModFileName != "" {
-		body, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", area_file_path, lastModFileName))
+		body, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", areaDirPath, lastModFileName))
 		if err != nil {
 			return err
 		}
@@ -109,7 +118,7 @@ func GetProvinces() (models.Areas, error) {
 	areaCacheMu.RLock()
 	defer areaCacheMu.RUnlock()
 
-	return provincesCache[area_top_code], nil
+	return provincesCache[areaTopCode], nil
 }
 
 func GetCities(provinceCode string) (models.Areas, error) {
@@ -139,8 +148,8 @@ func saveAreasFile(areas models.Areas) error {
 		return err
 	}
 	file, err := os.Create(fmt.Sprintf(
-		area_file_path+"/"+area_file_name_template,
-		time.Now().Format(area_file_name_layout),
+		areaDirPath+"/"+areaFileNameTemplate,
+		time.Now().Format(areaFileNameLayout),
 	))
 	if err != nil {
 		return err
@@ -172,7 +181,7 @@ func saveAreasCache(areas models.Areas) error {
 			Code:   province.Code,
 			Center: province.Center,
 		}
-		provincesCache[area_top_code] = append(provincesCache[area_top_code], models.Area{
+		provincesCache[areaTopCode] = append(provincesCache[areaTopCode], models.Area{
 			Name:   province.Name,
 			Level:  province.Level,
 			Code:   province.Code,
