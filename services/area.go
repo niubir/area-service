@@ -119,7 +119,7 @@ func GetDistricts(cityCode string) (models.Areas, error) {
 	return districtsCache[cityCode], nil
 }
 
-func GetStreet(districtCode string) (models.Areas, error) {
+func GetStreets(districtCode string) (models.Areas, error) {
 	areaCacheMu.RLock()
 	defer areaCacheMu.RUnlock()
 

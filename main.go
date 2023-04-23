@@ -3,9 +3,9 @@ package main
 import (
 	"sync"
 
-	"github.com/niubir/area-service/http"
-
 	"github.com/niubir/area-service/config"
+	"github.com/niubir/area-service/grpc"
+	"github.com/niubir/area-service/http"
 	"github.com/niubir/area-service/logs"
 	"github.com/niubir/area-service/services"
 )
@@ -17,6 +17,9 @@ func main() {
 
 	wg.Add(1)
 	go http.Init(&wg)
+
+	wg.Add(1)
+	go grpc.Init(&wg)
 
 	wg.Wait()
 }

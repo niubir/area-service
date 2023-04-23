@@ -40,7 +40,7 @@ func freshAreas(c *gin.Context) {
 	c.JSON(http.StatusOK, nil)
 }
 
-// @Summary      获取区域
+// @Summary      获取指定区域
 // @Tags         相关接口
 // @Param        code  query  string  true  "区域编码"
 // @success      200 {object} models.Area "结果"
@@ -121,7 +121,7 @@ func getStreets(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "parameter districtCode must")
 		return
 	}
-	streets, err := services.GetStreet(districtCode)
+	streets, err := services.GetStreets(districtCode)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return

@@ -12,10 +12,22 @@ const (
 )
 
 type config struct {
-	Mode          string `yaml:"mode"`
-	Debug         bool   `yaml:"debug"`
-	AmapKey       string `yaml:"amapKey"`
-	AutoFreshTime string `yaml:"autoFreshTime"`
+	Mode          string      `yaml:"mode"`
+	Debug         bool        `yaml:"debug"`
+	AmapKey       string      `yaml:"amapKey"`
+	AutoFreshTime string      `yaml:"autoFreshTime"`
+	HTTP          *httpConfig `yaml:"http"`
+	GRPC          *grpcConfig `yaml:"grpc"`
+}
+
+type httpConfig struct {
+	Enable bool `yaml:"enable"`
+	Port   int  `yaml:"port"`
+}
+
+type grpcConfig struct {
+	Enable bool `yaml:"enable"`
+	Port   int  `yaml:"port"`
 }
 
 func (c *config) init() error {
@@ -28,6 +40,41 @@ func (c *config) init() error {
 		return errors.New("invalid config: amapKey")
 	}
 
+	if c.HTTP == nil {
+		c.HTTP = &httpConfig{Enable: true}
+	}
+	if c.GRPC == nil {
+		c.GRPC = &grpcConfig{Enable: true}
+	}
+
+	if err := c.HTTP.init(); err != nil {
+		return err
+	}
+
+	if err := c.GRPC.init(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *httpConfig) init() error {
+	if !c.Enable {
+		return nil
+	}
+	if c.Port <= 0 {
+		c.Port = 10011
+	}
+	return nil
+}
+
+func (c *grpcConfig) init() error {
+	if !c.Enable {
+		return nil
+	}
+	if c.Port <= 0 {
+		c.Port = 10012
+	}
 	return nil
 }
 

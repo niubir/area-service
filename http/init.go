@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"io"
 	"sync"
 
@@ -10,16 +11,23 @@ import (
 )
 
 func Init(wg *sync.WaitGroup) {
+	defer func() {
+		wg.Done()
+	}()
+
+	if !config.Config.HTTP.Enable {
+		return
+	}
+
+	address := fmt.Sprintf(":%d", config.Config.HTTP.Port)
+
 	setGinMode()
 	setGinWriter()
-
 	engine := gin.Default()
-
 	initRoutes(engine)
 
-	engine.Run(":10011")
-
-	wg.Done()
+	logs.Info("start http, address(%s)", address)
+	engine.Run(address)
 }
 
 func setGinWriter() {
