@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	areaDirPath          = "/data"
+	areaDir              = "/data"
 	areaFileNameTemplate = "area_%s.json"
 	areaFileNameLayout   = "20060102150405"
 	areaTopCode          = "100000"
@@ -28,24 +28,25 @@ var (
 )
 
 func init() {
-	if envAreaPath := os.Getenv(`AREA_DIR_PATH`); envAreaPath != "" {
-		areaDirPath = envAreaPath
+	if envAreaDir := os.Getenv(`AREA_DIR`); envAreaDir != "" {
+		areaDir = envAreaDir
 	}
-	if !utils.FilepathExist(areaDirPath) {
-		if err := os.Mkdir(areaDirPath, os.ModePerm); err != nil {
+	if !utils.FilepathExist(areaDir) {
+		if err := os.Mkdir(areaDir, os.ModePerm); err != nil {
 			panic(err)
 		}
 	}
+	utils.BoldPrint("***AREA DIR***\n%s", areaDir)
 }
 
 func initArea() error {
-	if !utils.FilepathExist(areaDirPath) {
-		if err := os.Mkdir(areaDirPath, os.ModePerm); err != nil {
+	if !utils.FilepathExist(areaDir) {
+		if err := os.Mkdir(areaDir, os.ModePerm); err != nil {
 			return err
 		}
 	}
 
-	fileInfos, err := ioutil.ReadDir(areaDirPath)
+	fileInfos, err := ioutil.ReadDir(areaDir)
 	if err != nil {
 		return err
 	}
@@ -68,7 +69,7 @@ func initArea() error {
 	}
 
 	if lastModFileName != "" {
-		body, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", areaDirPath, lastModFileName))
+		body, err := ioutil.ReadFile(fmt.Sprintf("%s/%s", areaDir, lastModFileName))
 		if err != nil {
 			return err
 		}
@@ -148,7 +149,7 @@ func saveAreasFile(areas models.Areas) error {
 		return err
 	}
 	file, err := os.Create(fmt.Sprintf(
-		areaDirPath+"/"+areaFileNameTemplate,
+		areaDir+"/"+areaFileNameTemplate,
 		time.Now().Format(areaFileNameLayout),
 	))
 	if err != nil {

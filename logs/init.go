@@ -10,20 +10,21 @@ import (
 )
 
 var (
-	logDirPath = "/logs"
+	logDir = "/logs"
 
 	l *logger.Logger
 )
 
 func init() {
-	if envLogPath := os.Getenv(`LOG_DIR_PATH`); envLogPath != "" {
-		logDirPath = envLogPath
+	if envLogDir := os.Getenv(`LOG_DIR`); envLogDir != "" {
+		logDir = envLogDir
 	}
-	if !utils.FilepathExist(logDirPath) {
-		if err := os.Mkdir(logDirPath, os.ModePerm); err != nil {
+	if !utils.FilepathExist(logDir) {
+		if err := os.Mkdir(logDir, os.ModePerm); err != nil {
 			panic(err)
 		}
 	}
+	utils.BoldPrint("***LOG DIR***\n%s", logDir)
 }
 
 func Init() error {
@@ -62,7 +63,7 @@ func NewLogger(prefix string) (*logger.Logger, error) {
 		logger.WithLevel(loggerLevel),
 		logger.WithTimeFormat(time.RFC3339Nano),
 		logger.WithStdout(loggerWithStdout),
-		logger.WithPath(logDirPath),
+		logger.WithPath(logDir),
 		logger.WithPrefix(prefix),
 		logger.WithDuration(24*time.Hour),
 		logger.WithMaxByte(10*1024*1024),
@@ -84,7 +85,7 @@ func NewFileLogger(prefix string) (*logger.FileLogger, error) {
 		logger.WithLevel(loggerLevel),
 		logger.WithTimeFormat(time.RFC3339Nano),
 		logger.WithStdout(loggerWithStdout),
-		logger.WithPath(logDirPath),
+		logger.WithPath(logDir),
 		logger.WithPrefix(prefix),
 		logger.WithDuration(24*time.Hour),
 		logger.WithMaxByte(10*1024*1024),

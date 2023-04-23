@@ -10,19 +10,31 @@ import (
 )
 
 var (
-	configFilePath = "/config/config.yml"
+	configDir      = "/config"
+	configFilename = "config.yml"
 	Config         config
 )
 
 func init() {
-	if envConfigFilePath := os.Getenv(`CONFIG_FILE_PATH`); envConfigFilePath != "" {
-		configFilePath = envConfigFilePath
+	if envConfigDir := os.Getenv(`CONFIG_DIR`); envConfigDir != "" {
+		configDir = envConfigDir
 	}
+	if !utils.FilepathExist(configDir) {
+		if err := os.Mkdir(configDir, os.ModePerm); err != nil {
+			panic(err)
+		}
+	}
+
+	if envConfigFilename := os.Getenv(`CONFIG_FILENAME`); envConfigFilename != "" {
+		configFilename = envConfigFilename
+	}
+
+	utils.BoldPrint("***CONFIG FILE***\n%s", configDir+"/"+configFilename)
 }
 
 // Init 初始化配置文件
 func Init() error {
-	data, err := ioutil.ReadFile(configFilePath)
+	data, err := ioutil.ReadFile(configDir + "/" + configFilename)
 	if err != nil {
 		return errors.New("invalid load config file: " + err.Error())
 	}
@@ -34,7 +46,7 @@ func Init() error {
 	}
 
 	configBody, _ := yaml.Marshal(Config)
-	utils.BoldPrint("***Config Information***\n\n%s", string(configBody))
+	utils.BoldPrint("***CONFIG INFORMATION***\n\n%s", string(configBody))
 
 	return nil
 }
