@@ -19,15 +19,17 @@ docker pull xxxx/niubir/area-service
 docker run xxxx/niubir/area-service
 ```
 
-### http docs
 
-```
-http://localhost:10011/swagger/index.html
-```
+3. http
+> swgger http://localhost:10011/swagger/index.html
+>
+> client https://github.com/niubir/area-service-client
 
-### grpc docs
+4. grpc
+> proto https://github.com/niubir/area-service/blob/main/grpc/area.proto
+>
+> client https://github.com/niubir/area-service-client
 
-TODO
 
 ## Configuration option
 
@@ -39,3 +41,7 @@ TODO
 | debug | false | is debug enabled |
 | amapKey | - | [Amap App](https://console.amap.com/dev/key/app) |
 | autoFreshTime | - | at what time does the automatic fresh of area every day, for example:00:00:00 |
+| http.enable | true | enable http |
+| http.port | 10011 | http port |
+| grpc.enable | true | enable grpc |
+| grpc.port | 10012 | grpc port |
