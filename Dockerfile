@@ -14,7 +14,7 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 COPY . .
-RUN go build -ldflags="-s -w" -o /app/service ./main.go
+RUN go build -ldflags="-s -w" -o service ./main.go
 
 
 FROM scratch
@@ -22,7 +22,7 @@ FROM scratch
 COPY --from=builder /usr/share/zoneinfo/Asia/Shanghai /usr/share/zoneinfo/Asia/Shanghai
 ENV TZ Asia/Shanghai
 
-WORKDIR /app
-COPY --from=builder /app /app
+WORKDIR /
+COPY --from=builder / /
 
 CMD ["./service"]
