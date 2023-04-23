@@ -1,6 +1,7 @@
 package services
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -10,6 +11,12 @@ import (
 
 	"github.com/niubir/area-service/config"
 	"github.com/niubir/area-service/models"
+)
+
+var (
+	amapClient = &http.Client{Transport: &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}}
 )
 
 type AmapAreas []AmapArea
@@ -38,7 +45,7 @@ func getAmapAreas() (models.Areas, error) {
 }
 
 func getAmapAreasQuery(code string, subdistrict int) (models.Areas, error) {
-	response, err := http.Get(fmt.Sprintf(
+	response, err := amapClient.Get(fmt.Sprintf(
 		"https://restapi.amap.com/v3/config/district?key=%s&keywords=%s&subdistrict=%d&extensions=base&filter=adcode",
 		config.Config.AmapKey,
 		code,
