@@ -1,2 +1,10 @@
-amapKey: xxxx set you amap key xxxxx
+mode: TEST
+debug: true
+amapKey: <set you amap key>
 autoFreshTime: 00:00:00
+http:
+  enable: true
+  port: 10011
+grpc:
+  enable: true
+  port: 10012
