@@ -4,4 +4,3 @@
 *.so
 *.dylib
 .vscode
-logs/*.log
