@@ -9,11 +9,16 @@ const (
 	mode_production  = "PRODUCTION"
 	mode_test        = "TEST"
 	mode_development = "DEVELOPMENT"
+
+	LOG_LEVEL_DEBUG = "DEBUG"
+	LOG_LEVEL_INFO  = "INFO"
+	LOG_LEVEL_WARN  = "WARN"
+	LOG_LEVEL_ERROR = "ERROR"
 )
 
 type config struct {
 	Mode          string      `yaml:"mode"`
-	Debug         bool        `yaml:"debug"`
+	LogLevel      string      `yaml:"logLevel"`
 	AmapKey       string      `yaml:"amapKey"`
 	AutoFreshTime string      `yaml:"autoFreshTime"`
 	HTTP          *httpConfig `yaml:"http"`
@@ -22,11 +27,13 @@ type config struct {
 
 type httpConfig struct {
 	Enable bool `yaml:"enable"`
+	Debug  bool `yaml:"debug"`
 	Port   int  `yaml:"port"`
 }
 
 type grpcConfig struct {
 	Enable bool `yaml:"enable"`
+	Debug  bool `yaml:"debug"`
 	Port   int  `yaml:"port"`
 }
 
@@ -34,6 +41,11 @@ func (c *config) init() error {
 	c.Mode = strings.ToUpper(c.Mode)
 	if c.Mode != mode_production && c.Mode != mode_development && c.Mode != mode_test {
 		c.Mode = mode_production
+	}
+
+	c.LogLevel = strings.ToUpper(c.LogLevel)
+	if c.LogLevel != LOG_LEVEL_DEBUG && c.LogLevel != LOG_LEVEL_INFO && c.LogLevel != LOG_LEVEL_WARN && c.LogLevel != LOG_LEVEL_ERROR {
+		c.LogLevel = LOG_LEVEL_INFO
 	}
 
 	if c.AmapKey == "" {

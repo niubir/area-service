@@ -608,8 +608,8 @@ github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJ
 github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9Gz0M=
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
-github.com/niubir/logger v1.0.1 h1:OminR5lyG6Aw7Q3Rf6dCWpK9y8KR+YGRPEvCcOn1nnw=
-github.com/niubir/logger v1.0.1/go.mod h1:VlOqLCToNzQPApvbIUNtyLelZcNe7E9+AYjD19behCM=
+github.com/niubir/logger v1.0.3 h1:DOmMaNSWVStLfvZrXC+VCWdJpc2kDlHdky1eiRs+M5Q=
+github.com/niubir/logger v1.0.3/go.mod h1:rhkmToEKUDWT5Wd8H8yF2/dhI7rF+cNUbd+eddHm/Aw=
 github.com/niubir/utils v0.0.3 h1:gRbkvp5hTR1OZboqr2qKLJCN8HKToHiqx9cKsnJpE7s=
 github.com/niubir/utils v0.0.3/go.mod h1:Zrqpy6foKAZTUaxHrficJ3pUX9ZY0vo526g9mdYM0D8=
 github.com/pelletier/go-toml/v2 v2.0.1/go.mod h1:r9LEWfGN8R5k0VXJ+0BkIe7MYkRdwZOjgMj2KwnJFUo=

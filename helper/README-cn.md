@@ -63,12 +63,14 @@ git clone https://github.com/niubir/area-service-client
 | Option | Default | Description |
 | - | - | - |
 | mode | PRODUCTION | system mode(PRODUCTION,TEST,DEVELOPMENT) |
-| debug | false | is debug enabled |
+| logLevel | false | log level(DEBUG,INFO,WARN,ERROR) |
 | amapKey | - | [Amap App](https://console.amap.com/dev/key/app) |
 | autoFreshTime | - | at what time does the automatic fresh of area every day, for example:00:00:00 |
 | http.enable | true | enable http |
+| http.debug | false | enable http debug |
 | http.port | 10011 | http port |
 | grpc.enable | true | enable grpc |
+| grpc.debug | false | enable grpc debug |
 | grpc.port | 10012 | grpc port |
 
 # 环境变量选项

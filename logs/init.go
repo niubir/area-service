@@ -12,7 +12,7 @@ import (
 var (
 	logDir = "/logs"
 
-	l *logger.Logger
+	System *logger.Logger
 )
 
 func init() {
@@ -29,66 +29,33 @@ func init() {
 
 func Init() error {
 	var err error
-	l, err = NewLogger("area_service")
+	System, err = NewLogger("area_service")
 	return err
 }
 
-func Debug(s string, i ...interface{}) {
-	l.Debug(s, i...)
-}
-
-func Info(s string, i ...interface{}) {
-	l.Info(s, i...)
-}
-
-func Warn(s string, i ...interface{}) {
-	l.Warn(s, i...)
-}
-
-func Error(s string, i ...interface{}) {
-	l.Error(s, i...)
-}
-
 func NewLogger(prefix string) (*logger.Logger, error) {
-	loggerLevel := logger.ErrorLevel
-	loggerWithStdout := false
-	loggerWithStack := false
-	if config.Config.Debug {
-		loggerLevel = logger.DebugLevel
-		loggerWithStdout = true
-		loggerWithStack = true
+	logLevel := logger.ErrorLevel
+	switch config.Config.LogLevel {
+	case config.LOG_LEVEL_DEBUG:
+		logLevel = logger.DebugLevel
+	case config.LOG_LEVEL_INFO:
+		logLevel = logger.InfoLevel
+	case config.LOG_LEVEL_WARN:
+		logLevel = logger.WarningLevel
+	case config.LOG_LEVEL_ERROR:
+		logLevel = logger.ErrorLevel
 	}
 
 	return logger.NewLogger(
-		logger.WithLevel(loggerLevel),
-		logger.WithTimeFormat(time.RFC3339Nano),
-		logger.WithStdout(loggerWithStdout),
-		logger.WithPath(logDir),
-		logger.WithPrefix(prefix),
-		logger.WithDuration(24*time.Hour),
-		logger.WithMaxByte(10*1024*1024),
-		logger.WithStack(loggerWithStack),
-	)
-}
-
-func NewFileLogger(prefix string) (*logger.FileLogger, error) {
-	loggerLevel := logger.ErrorLevel
-	loggerWithStdout := false
-	loggerWithStack := false
-	if config.Config.Debug {
-		loggerLevel = logger.DebugLevel
-		loggerWithStdout = true
-		loggerWithStack = true
-	}
-
-	return logger.NewFileLogger(
-		logger.WithLevel(loggerLevel),
-		logger.WithTimeFormat(time.RFC3339Nano),
-		logger.WithStdout(loggerWithStdout),
-		logger.WithPath(logDir),
-		logger.WithPrefix(prefix),
-		logger.WithDuration(24*time.Hour),
-		logger.WithMaxByte(10*1024*1024),
-		logger.WithStack(loggerWithStack),
+		logger.WithTime(),
+		logger.SetLevel(logLevel),
+		logger.WithStack(),
+		logger.WithStdout(),
+		logger.WithFileout(
+			logger.WithFilePath(logDir),
+			logger.WithFilePrefix(prefix),
+			logger.WithFileDuration(24*time.Hour),
+			logger.WithFileMaxByte(10*1024*1024),
+		),
 	)
 }

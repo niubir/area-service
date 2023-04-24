@@ -22,25 +22,25 @@ func Init(wg *sync.WaitGroup) {
 	address := fmt.Sprintf(":%d", config.Config.HTTP.Port)
 
 	setGinMode()
-	setGinWriter()
+	setGinLogger()
 	engine := gin.Default()
 	initRoutes(engine)
 
-	logs.Info("start http, address(%s)", address)
+	logs.System.Infof("start http, address(%s)\n", address)
 	engine.Run(address)
 }
 
-func setGinWriter() {
+func setGinLogger() {
 	ginWriter := io.Discard
 	ginErrorWriter := io.Discard
-	if config.Config.Debug {
-		if w, err := logs.NewFileLogger("area_service_http"); err != nil {
-			logs.Error("create area service http logger failed: %v", err)
+	if config.Config.HTTP.Debug {
+		if w, err := logs.NewLogger("area_service_http"); err != nil {
+			logs.System.Errorln("create area service http logger failed:", err)
 		} else {
 			ginWriter = w
 		}
-		if w, err := logs.NewFileLogger("area_service_http_error"); err != nil {
-			logs.Error("create area service error http logger failed: %v", err)
+		if w, err := logs.NewLogger("area_service_http_error"); err != nil {
+			logs.System.Errorln("create area service error http logger failed:", err)
 		} else {
 			ginErrorWriter = w
 		}

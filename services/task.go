@@ -34,7 +34,7 @@ func autoFreshArea() {
 	for range timer.C {
 		go func() {
 			if err := FreshAreas(); err != nil {
-				logs.Error("auto fresh areas failed: %v", err)
+				logs.System.Errorln("auto fresh areas failed:", err)
 			}
 		}()
 		timer.Reset(24 * time.Hour)
